@@ -1,7 +1,7 @@
-package model;
+package src.models;
 
 import java.util.ArrayList;
-import enums.FilaInteresseStatus;
+import src.enums.FilaInteresseStatus;
 
 public abstract class Animal {
 	private String nome;

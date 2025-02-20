@@ -1,4 +1,4 @@
-package model;
+package src.models;
 
 public class FilaInteresseItem {
 	Adotante interessado;
