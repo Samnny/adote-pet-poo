@@ -1,7 +1,7 @@
-package src.models;
+package models;
 
 import java.util.ArrayList;
-import src.enums.FilaInteresseStatus;
+import enums.FilaInteresseStatus;
 
 public abstract class Animal {
 	private String nome;
@@ -10,7 +10,21 @@ public abstract class Animal {
 	private String cor;
 	private String raca;
 	private ArrayList<FilaInteresseItem> filaInteresse;
-	private FilaInteresseStatus statusFilaInteresse = FilaInteresseStatus.ANALISE;
+	private FilaInteresseStatus statusFilaInteresse;
+	
+	Animal(
+			String nome,
+			int id,
+			String cor,
+			String raca
+	) {
+		this.nome = nome;
+		this.id = id;
+		this.cor = cor;
+		this.raca = raca;
+		filaInteresse = new ArrayList<FilaInteresseItem>();
+		statusFilaInteresse = FilaInteresseStatus.ANALISE;
+	}
 
 	public void setNome(String nome) {
 		this.nome = nome;

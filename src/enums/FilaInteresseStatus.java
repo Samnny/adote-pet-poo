@@ -1,4 +1,4 @@
-package src.enums;
+package enums;
 
 public enum FilaInteresseStatus {
 	ANALISE(0), FINALIZADO(1);
@@ -9,7 +9,7 @@ public enum FilaInteresseStatus {
 		this.status = status;
 	}
 	
-	public int getDescricao() {
+	public int getStatus() {
 		return status;
 	}
 };
