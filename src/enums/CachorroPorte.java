@@ -1,4 +1,4 @@
-package enums;
+package src.enums;
 
 public enum CachorroPorte {
 	MINI(0), PEQUENO(1), MEDIO(2), GRANDE(3);

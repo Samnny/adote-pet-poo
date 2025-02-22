@@ -1,12 +1,12 @@
-package models;
+package src.models;
 
-import enums.CachorroPorte;
+import src.enums.CachorroPorte;
 
 public class Cachorro extends Animal {
 	private CachorroPorte porte;
 	
-	Cachorro(String nome, int id, String cor, String raca, CachorroPorte porte) {
-		super(nome, id, cor, raca);
+	Cachorro(int id, String nome, String cor, String raca, CachorroPorte porte) {
+		super(id, nome, cor, raca);
 		this.setPorte(porte);
 	}
 

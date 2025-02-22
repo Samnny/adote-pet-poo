@@ -1,7 +1,8 @@
-package models;
+package src.models;
+
+import enums.FilaInteresseStatus;
 
 import java.util.ArrayList;
-import enums.FilaInteresseStatus;
 
 public abstract class Animal {
 	private String nome;
@@ -13,13 +14,13 @@ public abstract class Animal {
 	private FilaInteresseStatus statusFilaInteresse;
 	
 	Animal(
-			String nome,
 			int id,
+			String nome,
 			String cor,
 			String raca
 	) {
-		this.nome = nome;
 		this.id = id;
+		this.nome = nome;
 		this.cor = cor;
 		this.raca = raca;
 		filaInteresse = new ArrayList<FilaInteresseItem>();

@@ -1,12 +1,11 @@
-package models;
-
-import enums.GatoPelo;
+package src.models;
+import src.enums.GatoPelo;
 
 public class Gato extends Animal {
 	private GatoPelo pelo;
 	
-	Gato(String nome, int id, String cor, String raca, GatoPelo pelo) {
-		super(nome, id, cor, raca);
+	public Gato(int id, String nome, String cor, String raca, GatoPelo pelo) {
+		super(id, nome, cor, raca);
 		this.setPelo(pelo);
 	}
 	
