@@ -26,6 +26,12 @@ public abstract class Animal {
 		filaInteresse = new ArrayList<FilaInteresseItem>();
 		statusFilaInteresse = FilaInteresseStatus.ANALISE;
 	}
+	
+	@Override
+	public String toString() {
+		return "Id do Animal: #" + getId() + "\n" +
+			   "Nome do Animal: " + getNome();
+	}
 
 	public void setNome(String nome) {
 		this.nome = nome;

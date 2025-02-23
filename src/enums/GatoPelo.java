@@ -9,7 +9,7 @@ public enum GatoPelo {
 		this.pelo = pelo;
 	}
 	
-	public int getPorte() {
+	public int getPelo() {
 		return pelo;
 	}
 }

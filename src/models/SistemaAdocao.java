@@ -108,8 +108,21 @@ public class SistemaAdocao {
     private void buscarPets() {
         List<Animal> animais = animalRepositorio.listarAnimais();
         for (Animal animal : animais) {
-            System.out.println(animal);
+        	if (animal.getAdotante() == null) {
+        		System.out.println(animal.toString());
+                System.out.println("Raça do Animal: " + animal.getRaca());
+                System.out.println("Cor do Animal: " + animal.getCor());
+        	}
         }
+        menuBuscarPetsDisponiveis();
+    }
+    
+    private void menuBuscarPetsDisponiveis() {
+    	/* TODO: fazer menu de buscar pets disponíveis pro adotante:
+    	 * Deve conter as opções
+    	 * - Filtrar pets
+		 * - Selecionar um pet
+		 * - Voltar ao menu anterior */
     }
 
     private void acompanharAdocoes() {
@@ -118,10 +131,7 @@ public class SistemaAdocao {
         for (Animal animal : animais) {
         	for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
         		if (candidatura.getInteressado().getId() == usuarioAtual.getId()) {
-                	System.out.print("ID do Animal: ");
-        			System.out.println(animal.getId());
-        			System.out.print("Nome do Animal: ");
-        			System.out.println(animal.getNome());
+                	System.out.println(animal.toString());
         			System.out.print("Status da Fila de Interesse: ");
         			System.out.println(animal.getStatusFilaInteresse());
         			System.out.print("Data da sua aplicação: ");
@@ -229,6 +239,7 @@ public class SistemaAdocao {
         }
 
         animalRepositorio.cadastrarAnimal(novoAnimal);
+        usuarioAtual.adicionarPet(novoAnimal);
         System.out.println("Pet adicionado com sucesso!");
     }
 
