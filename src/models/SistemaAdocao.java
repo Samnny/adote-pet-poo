@@ -4,6 +4,8 @@ import src.enums.CachorroPorte;
 import src.enums.GatoPelo;
 import src.repositories.UsuarioRepositorio;
 import src.repositories.AnimalRepositorio;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -131,6 +133,54 @@ public class SistemaAdocao {
         		}
         	}
         }
+        menuFilaInteresseAdotante();
+    }
+    
+    private void menuFilaInteresseAdotante() {
+    	while (true) {
+    		System.out.println("1. Escolher processo de adoção para cancelar\n2.Voltar");
+    		
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		if (escolha == 1) {
+    			cancelarProcessoAdocao();
+    		} else {
+    			break;
+    		}
+    	}
+    }
+    
+    private void cancelarProcessoAdocao() {
+    	while (true) {
+    		System.out.println("Digite o id do animal do qual deseja sair da fila de interesse:");
+    		
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		Animal animal = animalRepositorio.buscarAnimal(escolha);
+    		
+    		if (animal != null) {
+    			ArrayList<FilaInteresseItem> novaFilaInteresse = new ArrayList<FilaInteresseItem>();
+    			novaFilaInteresse = animal.getFilaInteresse();
+    			boolean adotanteEncontrado = false;
+    			for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
+    				if (candidatura.getInteressado().getId() == usuarioAtual.getId()) {
+    					novaFilaInteresse.remove(candidatura);
+    					animal.setFilaInteresse(novaFilaInteresse);
+    					adotanteEncontrado = true;
+    					break;
+    				}
+    			}
+    			if (!adotanteEncontrado) {
+    				System.out.println("Você não aplicou para esse animal. Verifique o id na sua lista de processos de adoção.");    				
+    			}
+    			break;
+    		} else {
+    			System.out.println("Esse animal não existe.");
+        		break;
+    		}
+    	}
     }
 
     private void menuGuardiao() {
