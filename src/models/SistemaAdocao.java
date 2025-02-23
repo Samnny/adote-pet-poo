@@ -112,6 +112,25 @@ public class SistemaAdocao {
 
     private void acompanharAdocoes() {
         System.out.println("Acompanhando processos de adoção...");
+        List<Animal> animais = animalRepositorio.listarAnimais();
+        for (Animal animal : animais) {
+        	for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
+        		if (candidatura.getInteressado().getId() == usuarioAtual.getId()) {
+                	System.out.print("ID do Animal: ");
+        			System.out.println(animal.getId());
+        			System.out.print("Nome do Animal: ");
+        			System.out.println(animal.getNome());
+        			System.out.print("Status da Fila de Interesse: ");
+        			System.out.println(animal.getStatusFilaInteresse());
+        			System.out.print("Data da sua aplicação: ");
+        			System.out.println(candidatura.getData());
+        			System.out.print("Sua mensagem de aplicação: ");
+                	System.out.println(candidatura.getMensagem());
+                	System.out.println("==================================");
+        			break;
+        		}
+        	}
+        }
     }
 
     private void menuGuardiao() {

@@ -1,6 +1,6 @@
 package src.models;
 
-import enums.FilaInteresseStatus;
+import src.enums.FilaInteresseStatus;
 
 import java.util.ArrayList;
 
