@@ -1,6 +1,8 @@
 package src.repositories;
 
 import src.models.Animal;
+import src.models.Usuario;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,15 @@ public class AnimalRepositorio {
     public void cadastrarAnimal(Animal animal) {
         animal.setId(gerarId());
         animais.add(animal);
+    }
+    
+    public Animal buscarAnimal(int id) {
+        for (Animal animal : animais) {
+            if (animal.getId() == id) {
+                return animal;
+            }
+        }
+        return null;
     }
 
     public void editarAnimal(int index, Animal animal) {
