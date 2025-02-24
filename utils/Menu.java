@@ -352,19 +352,7 @@ public class Menu {
 				System.out.println("Id usuário interessado: " + Integer.toString(interessado.getId()));
 				System.out.println("Nome usuário interessado: " + interessado.getNome());
 				System.out.println("Mensagem da aplicação: " + candidatura.getMensagem());
-				System.out.println("E-mail do usuário: " + interessado.getEmail().getValor());
-				System.out.println("Telefone do usuário: " + interessado.getTelefone().getValor());
-				System.out.println("Preferências de contato do usuário: ");
-				if (interessado.getTelefone().isWhatsapp()) {
-					System.out.println("(x) WhatsApp");				
-				} else {
-					System.out.println("( ) WhatsApp");
-				}
-				if (interessado.getTelefone().isLigacao()) {
-					System.out.println("(x) Ligação");				
-				} else {
-					System.out.println("( ) Ligação");
-				}
+				((Adotante) candidatura.getInteressado()).contatar();
 				System.out.println("Cidade do usuário: " + interessado.getEndereco().getCidade());
 				System.out.println("Estado do usuário: " + interessado.getEndereco().getEstado());
 				
@@ -409,6 +397,9 @@ public class Menu {
 			} else {
 				animal.setStatusFilaInteresse(FilaInteresseStatus.FINALIZADO);
 				animal.setAdotante(adotante);
+				adotante.setAnimaisAdotados(adotante.getAnimaisAdotados() + 1);
+				Guardiao guardiao = (Guardiao) usuarioAtual;
+				guardiao.setFinaisFelizes(guardiao.getFinaisFelizes() + 1);
 				return true;
 			}
 		}
