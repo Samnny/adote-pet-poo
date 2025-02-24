@@ -2,6 +2,7 @@ package src.repositories;
 
 import src.models.Adotante;
 import src.models.Animal;
+import src.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,14 @@ public class AnimalRepositorio {
 
     public void excluirAnimal(Animal animal) {
         animais.remove(animal);
+    }
+    
+    public void excluirAnimal(Animal animal, Usuario usuario) {
+    	if (animal.getGuardiao().getId() == usuario.getId()) {
+    		excluirAnimal(animal);
+    	} else {
+    		System.out.println("Ação proibida pro usuário atual. Você não é guardião desse Animal. Nenhuma ação foi realizada.");
+    	}
     }
 
     public List<Animal> listarAnimais() {
