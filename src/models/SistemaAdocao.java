@@ -1,21 +1,13 @@
 package src.models;
 
-import src.enums.CachorroPorte;
-import src.enums.GatoPelo;
 import src.repositories.UsuarioRepositorio;
-import utils.AnimalFiltro;
-import src.repositories.AnimalRepositorio;
+import utils.Menu;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class SistemaAdocao {
     private Usuario usuarioAtual;
     private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
-    private AnimalRepositorio animalRepositorio = new AnimalRepositorio();
     private Scanner scanner = new Scanner(System.in);
 
     public void iniciarSistema() {
@@ -142,275 +134,16 @@ public class SistemaAdocao {
             scanner.nextLine();
 
             if (escolha == 1) {
-                menuAdotante();
+            	Adotante usuario = (Adotante) usuarioAtual;
+            	Menu.MenuUsuario(usuario);
             } else if (escolha == 2) {
-                menuGuardiao();
+            	Guardiao usuario = (Guardiao) usuarioAtual;
+            	Menu.MenuUsuario(usuario);
             } else {
                 usuarioAtual = null;
                 System.out.println("Sessão encerrada.");
                 break;
             }
         }
-    }
-
-    private void menuAdotante() {
-        while (true) {
-            System.out.println("1. Buscar Pets para Adoção\n2. Acompanhar Adoções\n3. Voltar");
-            int escolha = scanner.nextInt();
-            scanner.nextLine();
-
-            if (escolha == 1) {
-                buscarPets();
-            } else if (escolha == 2) {
-                acompanharAdocoes();
-            } else {
-                break;
-            }
-        }
-    }
-    
-    private void exibirListaAnimais(List<Animal> animais) {
-    	for (Animal animal : animais) {
-    		animal.exibirTodasInformacoes();
-        }
-    }
-
-    private void buscarPets() {
-        List<Animal> animaisDisponiveis = animalRepositorio.listarAnimais("status", "disponível");
-        exibirListaAnimais(animaisDisponiveis);
-        menuBuscarPetsDisponiveis(animaisDisponiveis);
-    }
-    
-    private void menuBuscarPetsDisponiveis(List<Animal> animaisDisponiveis) {
-    	while (true) {
-    		System.out.println("1. Filtrar resultados\n2.Selecionar pet\n3.Voltar");
-    		
-    		int escolha = scanner.nextInt();
-    		scanner.nextLine();
-    		
-    		if (escolha == 1) {
-    			menuFiltrarPets(animaisDisponiveis);
-    		} else if (escolha == 2) {
-    			menuSelecionarPet(animaisDisponiveis);
-    		} else {
-    			break;
-    		}
-    	}
-    }
-    
-    private void menuSelecionarPet(List<Animal> animais) {
-    	while (true) {
-    		System.out.println("Digite o id do pet que deseja selecionar: ");
-    		
-    		String id = scanner.nextLine();
-    		Animal petSelecionado = animalRepositorio.listarAnimais(animais, "id", id).getFirst();
-    		menuPetSelecionado(petSelecionado);
-    	}
-    }
-    
-    private void menuPetSelecionado(Animal pet) {
-    	pet.exibirTodasInformacoes();
-    	while(true) {
-    		System.out.println("1. Entrar para fila de interesse\n2.Voltar");
-    		int escolha = scanner.nextInt();
-    		scanner.nextLine();
-    		
-    		if (escolha == 1) {
-    			System.out.println("Digite uma pequena descrição sobre você e porque se interessou por " + pet.getNome() + ". (Deixe vazio para cancelar a inscrição e voltar)");
-        		String mensagem = scanner.nextLine();
-        		if (mensagem.trim().isEmpty()) {
-        			break;
-        		} else {
-        			pet.addToFilaInteresse(
-    					new FilaInteresseItem((Adotante) usuarioAtual, ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toString(), mensagem)
-					);
-        		}
-    		} else {
-    			break;
-    		}
-    	}
-    }
-    
-    private void menuFiltrarPets(List<Animal> animais) {
-    	while (true) {
-    		System.out.println("Filtrar animais por:");
-    		System.out.println("1. Nome\n2. Id\n3. Espécie(GATO, CACHORRO)\n4. Cor");
-    		System.out.println("5. Raça\n6. Cidade\n7. Estado\n8. Voltar");
-    		
-    		int escolha = scanner.nextInt();
-    		scanner.nextLine();
-    		
-    		if (escolha == 8) {
-    			break;
-    		} else {
-    			AnimalFiltro filtro;
-    			switch(escolha) {
-    				case 1:
-    					filtro = new AnimalFiltro("nome");
-						filtro.pergutarValorFiltro();
-    					exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 2:
-    					filtro = new AnimalFiltro("id");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 3:
-    					filtro = new AnimalFiltro("tipo");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 4:
-    					filtro = new AnimalFiltro("cor");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 5:
-    					filtro = new AnimalFiltro("raça");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 6:
-    					filtro = new AnimalFiltro("cidade");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 7:
-    					filtro = new AnimalFiltro("estado");
-						filtro.pergutarValorFiltro();
-						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
-    					break;
-    				case 8:
-					default:
-    					break;
-    			}
-    		}
-    	}
-    }
-
-    private void acompanharAdocoes() {
-        System.out.println("Acompanhando processos de adoção...");
-        List<Animal> animais = animalRepositorio.listarAnimais();
-        for (Animal animal : animais) {
-        	for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
-        		if (candidatura.getInteressado().getId() == usuarioAtual.getId()) {
-                	System.out.println(animal.toString());
-        			System.out.print("Status da Fila de Interesse: ");
-        			System.out.println(animal.getStatusFilaInteresse());
-        			System.out.print("Data da sua aplicação: ");
-        			System.out.println(candidatura.getData());
-        			System.out.print("Sua mensagem de aplicação: ");
-                	System.out.println(candidatura.getMensagem());
-                	System.out.println("==================================");
-        			break;
-        		}
-        	}
-        }
-        menuFilaInteresseAdotante();
-    }
-    
-    private void menuFilaInteresseAdotante() {
-    	while (true) {
-    		System.out.println("1. Escolher processo de adoção para cancelar\n2.Voltar");
-    		
-    		int escolha = scanner.nextInt();
-    		scanner.nextLine();
-    		
-    		if (escolha == 1) {
-    			cancelarProcessoAdocao();
-    		} else {
-    			break;
-    		}
-    	}
-    }
-    
-    private void cancelarProcessoAdocao() {
-    	while (true) {
-    		System.out.println("Digite o id do animal do qual deseja sair da fila de interesse:");
-    		
-    		int escolha = scanner.nextInt();
-    		scanner.nextLine();
-    		
-    		Animal animal = animalRepositorio.buscarAnimal(escolha);
-    		
-    		if (animal != null) {
-    			ArrayList<FilaInteresseItem> novaFilaInteresse = new ArrayList<FilaInteresseItem>();
-    			novaFilaInteresse = animal.getFilaInteresse();
-    			boolean adotanteEncontrado = false;
-    			for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
-    				if (candidatura.getInteressado().getId() == usuarioAtual.getId()) {
-    					novaFilaInteresse.remove(candidatura);
-    					animal.setFilaInteresse(novaFilaInteresse);
-    					adotanteEncontrado = true;
-    					break;
-    				}
-    			}
-    			if (!adotanteEncontrado) {
-    				System.out.println("Você não aplicou para esse animal. Verifique o id na sua lista de processos de adoção.");    				
-    			}
-    			break;
-    		} else {
-    			System.out.println("Esse animal não existe.");
-        		break;
-    		}
-    	}
-    }
-
-    private void menuGuardiao() {
-        while (true) {
-            System.out.println("1. Adicionar Pet\n2. Listar Filas de Interesse\n3. Listar Meus Pets\n4. Voltar");
-            int escolha = scanner.nextInt();
-            scanner.nextLine();
-
-            if (escolha == 1) {
-                adicionarPet();
-            } else if (escolha == 2) {
-                listarFilasDeInteresse();
-            } else if (escolha == 3) {
-                listarMeusPets();
-            } else {
-                break;
-            }
-        }
-    }
-
-    private void adicionarPet() {
-        System.out.println("Digite nome do pet:");
-        String nome = scanner.nextLine();
-
-        System.out.println("Digite tipo do pet (Cachorro/Gato):");
-        String tipo = scanner.nextLine().toLowerCase();
-
-        System.out.println("Digite cor do pet:");
-        String cor = scanner.nextLine();
-
-        System.out.println("Digite raça do pet:");
-        String raca = scanner.nextLine();
-
-        Animal novoAnimal;
-        if (tipo.equals("cachorro")) {
-            System.out.println("Digite porte do cachorro (PEQUENO, MEDIO, GRANDE):");
-            CachorroPorte porte = CachorroPorte.valueOf(scanner.nextLine().toUpperCase());
-            novoAnimal = new Cachorro(animalRepositorio.gerarId(), nome, cor, raca, (Guardiao) usuarioAtual, porte);
-        } else if (tipo.equals("gato")) {
-            System.out.println("Digite tipo de pelo do gato (CURTO, MEDIO, LONGO):");
-            GatoPelo pelo = GatoPelo.valueOf(scanner.nextLine().toUpperCase());
-            novoAnimal = new Gato(animalRepositorio.gerarId(), nome, cor, raca, (Guardiao) usuarioAtual, pelo);
-        } else {
-            System.out.println("Tipo inválido!");
-            return;
-        }
-
-        animalRepositorio.cadastrarAnimal(novoAnimal);
-        System.out.println("Pet adicionado com sucesso!");
-    }
-
-    private void listarFilasDeInteresse() {
-        System.out.println("Listando filas de interesse...");
-        // Implementar lógica de exibição das filas
-    }
-
-    private void listarMeusPets() {
-        System.out.println("Listando pets do guardiao...");
     }
 }
