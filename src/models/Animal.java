@@ -78,6 +78,24 @@ public abstract class Animal {
 	public void setFilaInteresse(ArrayList<FilaInteresseItem> filaInteresse) {
 		this.filaInteresse = filaInteresse;
 	}
+	public FilaInteresseItem getCandidatura(int idAdotanteInteressado) {
+		for (FilaInteresseItem candidatura : getFilaInteresse()) {
+			if (candidatura.getInteressado().getId() == idAdotanteInteressado) {
+				return candidatura;
+			}
+		}
+		return null;
+	}
+	public void exibirDetalhesCandidatura(FilaInteresseItem candidatura) {
+		System.out.println(this.toString());
+		System.out.print("Status da Fila de Interesse: ");
+		System.out.println(this.getStatusFilaInteresse());
+		System.out.print("Data da sua aplicação: ");
+		System.out.println(candidatura.getData());
+		System.out.print("Sua mensagem de aplicação: ");
+    	System.out.println(candidatura.getMensagem());
+    	System.out.println("==================================");
+	}
 	public void addToFilaInteresse(FilaInteresseItem filaInteresse) {
 		this.filaInteresse.add(filaInteresse);
 	}
