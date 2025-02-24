@@ -25,8 +25,8 @@ import src.models.SistemaAdocao;
 public class Menu {
 	private static Usuario usuarioAtual;
 	private static String tipoUsuarioAtual;
-	private static AnimalRepositorio animalRepositorio = new AnimalRepositorio();
-	private static UsuarioRepositorio usuarioRepositorio = SistemaAdocao.usuarioRepositorio;
+	private static AnimalRepositorio animalRepositorio = AnimalRepositorio.getInstance();
+	private static UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance();
 	private static Scanner scanner = new Scanner(System.in);
 	
 	public static void MenuUsuario(Adotante adotante) {

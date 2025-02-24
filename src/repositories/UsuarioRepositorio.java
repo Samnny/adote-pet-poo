@@ -7,6 +7,17 @@ import java.util.List;
 public class UsuarioRepositorio {
     private List<Usuario> usuarios = new ArrayList<>();
     private int ultimoId = 0;
+    
+    private static UsuarioRepositorio instance;
+    
+    private UsuarioRepositorio() {};
+    
+    public static UsuarioRepositorio getInstance() {
+    	if (instance == null) {
+    		instance = new UsuarioRepositorio();
+    	}
+    	return instance;
+    }
 
     public void cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);

@@ -6,10 +6,20 @@ import utils.Menu;
 import java.util.Scanner;
 
 public class SistemaAdocao {
-    private Usuario usuarioAtual;
+	private static SistemaAdocao instance;
+	private Usuario usuarioAtual;
     private Scanner scanner = new Scanner(System.in);
+    
+    private SistemaAdocao() {}
+    
+    public static SistemaAdocao getInstance() {
+    	if (instance == null) {
+    		instance = new SistemaAdocao();
+    	}
+    	return instance;
+    }
 
-    public static UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+    public UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance();
 
     public void iniciarSistema() {
         while (true) {
