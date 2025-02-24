@@ -7,7 +7,6 @@ import src.repositories.UsuarioRepositorio;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,7 +19,6 @@ import src.models.Cachorro;
 import src.models.FilaInteresseItem;
 import src.models.Gato;
 import src.models.Guardiao;
-import src.models.SistemaAdocao;
 
 public class Menu {
 	private static Usuario usuarioAtual;
