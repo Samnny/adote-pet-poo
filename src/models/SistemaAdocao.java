@@ -3,6 +3,7 @@ package src.models;
 import src.enums.CachorroPorte;
 import src.enums.GatoPelo;
 import src.repositories.UsuarioRepositorio;
+import utils.AnimalFiltro;
 import src.repositories.AnimalRepositorio;
 
 import java.util.ArrayList;
@@ -33,25 +34,86 @@ public class SistemaAdocao {
     }
 
     private void cadastrarUsuario() {
+    	Email emailUsuario;
+    	Telefone telefoneUsuario;
+    	
         System.out.println("Digite nome:");
         String nome = scanner.nextLine();
-        System.out.println("Digite login:");
-        String login = scanner.nextLine();
+        
+        String login;
+        while (true) {
+        	System.out.println("Digite login:");
+        	login = scanner.nextLine();
+        	
+        	if (usuarioRepositorio.buscarUsuario(login)) {
+        		System.out.println("Esse login já existe. Tente novamente.");
+        	} else {
+        		break;
+        	}
+        }
         System.out.println("Digite senha:");
         String senha = scanner.nextLine();
 
-        System.out.println("Digite email:");
-        String email = scanner.nextLine();
-        System.out.println("Digite telefone:");
-        String telefone = scanner.nextLine();
-        System.out.println("Preferência de contato (1. Ligação 2. WhatsApp 3. Ambos):");
-        int preferenciaContato = scanner.nextInt();
-        scanner.nextLine();
+        while (true) {
+        	System.out.println("Digite email:");
+        	String email = scanner.nextLine();
+        
+        	emailUsuario = new Email(email);
+	        if (!emailUsuario.validar()) {
+	        	System.out.println("Email no formato errado. Tente novamente.");
+	        } else {
+	        	break;
+	        }
+        }
+        
+        int preferenciaContato = 0;
+        while (true) {
+        	System.out.println("Digite telefone:");
+        	String telefone = scanner.nextLine();
+        	
+        	boolean whatsapp = true;
+        	boolean ligacao = true;
+        	if (preferenciaContato == 0) {        		
+        		System.out.println("Preferência de contato (1. Ligação 2. WhatsApp 3. Ambos):");
+        		System.out.println("Por padrão, a opção \"ambos\" é selecionado.");
+        		preferenciaContato = scanner.nextInt();
+        		scanner.nextLine();
+        		
+        		switch(preferenciaContato) {
+        		case 1:
+        			whatsapp = true;
+        			ligacao = false;
+        			break;
+        		case 2:
+        			whatsapp = false;
+        			ligacao = true;
+        			break;
+        		case 3:
+        		default:
+        			whatsapp = true;
+        			ligacao = true;
+        			break;
+        		}
+        	}
+        	
+        	telefoneUsuario = new Telefone(telefone, whatsapp, ligacao);
+        	if (!telefoneUsuario.validar()) {
+        		System.out.println("Telefone no formato errado. Tente novamente.");
+        	} else {
+        		break;
+        	}
+        }
 
-        System.out.println("Digite endereço:");
-        String endereco = scanner.nextLine();
+        System.out.println("Digite seu bairro:");
+        String bairro = scanner.nextLine();
+        System.out.println("Digite sua cidade:");
+        String cidade = scanner.nextLine();
+        System.out.println("Digite seu estado:");
+        String estado = scanner.nextLine();
+        
+        Endereco endereco = new Endereco(bairro, cidade, estado);
 
-        Usuario novoUsuario = new Usuario();
+        Usuario novoUsuario = new Usuario(usuarioRepositorio.gerarId(), nome, login, senha, emailUsuario, telefoneUsuario, endereco);
         usuarioRepositorio.cadastrarUsuario(novoUsuario);
         System.out.println("Conta criada com sucesso!");
     }
@@ -62,7 +124,7 @@ public class SistemaAdocao {
         System.out.println("Digite senha:");
         String senha = scanner.nextLine();
 
-        usuarioAtual = usuarioRepositorio.buscarUsuario(login, senha);
+        usuarioAtual = usuarioRepositorio.autenticarUsuario(login, senha);
         if (usuarioAtual != null) {
             System.out.println("Login bem-sucedido!");
             menuPrincipal();
@@ -104,25 +166,98 @@ public class SistemaAdocao {
             }
         }
     }
+    
+    private void exibirListaAnimais(List<Animal> animais) {
+    	for (Animal animal : animais) {
+    		System.out.println(animal.toString());
+            System.out.println("Raça do Animal: " + animal.getRaca());
+            System.out.println("Cor do Animal: " + animal.getCor());
+            System.out.println("Espécie do Animal: " + animal.getTipo());
+        }
+    }
 
     private void buscarPets() {
-        List<Animal> animais = animalRepositorio.listarAnimais();
-        for (Animal animal : animais) {
-        	if (animal.getAdotante() == null) {
-        		System.out.println(animal.toString());
-                System.out.println("Raça do Animal: " + animal.getRaca());
-                System.out.println("Cor do Animal: " + animal.getCor());
-        	}
-        }
-        menuBuscarPetsDisponiveis();
+        List<Animal> animaisDisponiveis = animalRepositorio.listarAnimais("status", "disponível");
+        exibirListaAnimais(animaisDisponiveis);
+        menuBuscarPetsDisponiveis(animaisDisponiveis);
     }
     
-    private void menuBuscarPetsDisponiveis() {
-    	/* TODO: fazer menu de buscar pets disponíveis pro adotante:
-    	 * Deve conter as opções
-    	 * - Filtrar pets
-		 * - Selecionar um pet
-		 * - Voltar ao menu anterior */
+    private void menuBuscarPetsDisponiveis(List<Animal> animaisDisponiveis) {
+    	while (true) {
+    		System.out.println("1. Filtrar resultados\n2.Selecionar pet\n3.Voltar");
+    		
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		if (escolha == 1) {
+    			menuFiltrarPets(animaisDisponiveis);
+    		} else if (escolha == 2) {
+    			menuSelecionarPet(animaisDisponiveis);
+    		} else {
+    			break;
+    		}
+    	}
+    }
+    
+    private void menuSelecionarPet() {
+    	
+    }
+    
+    private void menuFiltrarPets(List<Animal> animais) {
+    	while (true) {
+    		System.out.println("Filtrar animais por:");
+    		System.out.println("1. Nome\n2. Id\n3. Espécie(GATO, CACHORRO)\n4. Cor");
+    		System.out.println("5. Raça\n6. Cidade\n7. Estado\n8. Voltar");
+    		
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		if (escolha == 8) {
+    			break;
+    		} else {
+    			AnimalFiltro filtro;
+    			switch(escolha) {
+    				case 1:
+    					filtro = new AnimalFiltro("nome");
+						filtro.pergutarValorFiltro();
+    					exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 2:
+    					filtro = new AnimalFiltro("id");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 3:
+    					filtro = new AnimalFiltro("tipo");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 4:
+    					filtro = new AnimalFiltro("cor");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 5:
+    					filtro = new AnimalFiltro("raça");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 6:
+    					filtro = new AnimalFiltro("cidade");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 7:
+    					filtro = new AnimalFiltro("estado");
+						filtro.pergutarValorFiltro();
+						exibirListaAnimais(animalRepositorio.listarAnimais(animais, filtro.getTipoFiltro(), filtro.getValorFiltro()));
+    					break;
+    				case 8:
+					default:
+    					break;
+    			}
+    		}
+    	}
     }
 
     private void acompanharAdocoes() {
@@ -192,6 +327,8 @@ public class SistemaAdocao {
     		}
     	}
     }
+    
+    public void menuSelecionarPet() {}
 
     private void menuGuardiao() {
         while (true) {
