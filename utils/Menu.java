@@ -2,14 +2,17 @@ package utils;
 
 import src.models.Usuario;
 import src.repositories.AnimalRepositorio;
+import src.repositories.UsuarioRepositorio;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 import src.enums.CachorroPorte;
+import src.enums.FilaInteresseStatus;
 import src.enums.GatoPelo;
 import src.models.Adotante;
 import src.models.Animal;
@@ -17,11 +20,13 @@ import src.models.Cachorro;
 import src.models.FilaInteresseItem;
 import src.models.Gato;
 import src.models.Guardiao;
+import src.models.SistemaAdocao;
 
 public class Menu {
 	private static Usuario usuarioAtual;
 	private static String tipoUsuarioAtual;
 	private static AnimalRepositorio animalRepositorio = new AnimalRepositorio();
+	private static UsuarioRepositorio usuarioRepositorio = SistemaAdocao.usuarioRepositorio;
 	private static Scanner scanner = new Scanner(System.in);
 	
 	public static void MenuUsuario(Adotante adotante) {
@@ -208,7 +213,7 @@ public class Menu {
 				if (escolha == 1) {
 					System.out.println("Digite uma pequena descrição sobre você e porque se interessou por " + pet.getNome() + ". (Deixe vazio para cancelar a inscrição e voltar)");
 					String mensagem = scanner.nextLine();
-					if (mensagem.trim().isEmpty()) {
+					if (mensagem.isBlank()) {
 						break;
 					} else {
 						pet.addToFilaInteresse(
@@ -277,15 +282,138 @@ public class Menu {
 
 	private static void MenuListarFilasInteresse(Guardiao guardiao) {
 		System.out.println("Listando filas de interesse...");
-        List<Animal> animais = animalRepositorio.listarAnimais("guardiao", Integer.toString(usuarioAtual.getId()));
-        for (Animal animal : animais) {
-        	System.out.print(animal.getId() + "  --  " + animal.getNome() + "  --  ");
-        	System.out.println(Integer.toString(animal.getFilaInteresse().size()) + " candidatos");
+        List<Animal> animaisDoGuardiao = animalRepositorio.listarAnimais("guardiao", Integer.toString(usuarioAtual.getId()));
+        for (Animal animal : animaisDoGuardiao) {
+        	animal.exibirInformacoesFilaInteresse();
         }
         while(true) {
-        	/* TODO: Fazer menu de pets guardião */
+    		System.out.println("1. Filtrar filas de interesse\n2. Escolher fila de interesse\n3. Voltar");
+    		
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		if (escolha == 1) {
+    			MenuFiltrarFilasInteresse(animaisDoGuardiao);
+    		} else if (escolha == 2) {
+    			MenuSelecionarFilaInteresse(animaisDoGuardiao);
+    		} else {
+    			break;
+    		}
         }
     }
+	
+	private static void MenuFiltrarFilasInteresse(List<Animal> animais) {
+		System.out.println("1. Exibir filas não-vazias\n2. Exibir animais com filas vazias\n3. Voltar");
+    		
+		int escolha = scanner.nextInt();
+		scanner.nextLine();
+		
+		if (escolha == 1) {
+			for (Animal animal : animais) {
+				if (!animal.getFilaInteresse().isEmpty()) {
+		        	animal.exibirInformacoesFilaInteresse();
+				}
+			}
+		} else if (escolha == 2) {
+			for (Animal animal : animais) {
+				if (animal.getFilaInteresse().isEmpty()) {
+		        	animal.exibirInformacoesFilaInteresse();
+				}
+			}
+		} else {
+			System.out.println("Opção inválida. Voltando ao menu anterior.");
+		}
+    }
+	
+	private static void MenuSelecionarFilaInteresse(List<Animal> animais) {
+		while (true) {
+    		System.out.println("Digite o id do pet que deseja selecionar a fila de interesse: ");
+    		
+    		String id = scanner.nextLine();
+    		List<Animal> petBusca = animalRepositorio.listarAnimais(animais, "id", id);
+    		if (petBusca.isEmpty()) {
+    			System.out.println("Não foi encontrado animal com esse id.");
+    			break;
+    		} else {
+    			Animal petSelecionado = petBusca.getFirst();
+    			MenuFilaInteresseParaPetSelecionado(petSelecionado);
+    		}
+    	}
+	}
+	
+	private static void MenuFilaInteresseParaPetSelecionado(Animal animal) {
+		boolean finalizado = false;
+		while (!finalizado) {
+			animal.exibirInformacoesFilaInteresse();
+			animal.ordenaFilaInteresse();
+			
+			for (FilaInteresseItem candidatura : animal.getFilaInteresse()) {
+				Usuario interessado = candidatura.getInteressado();
+				System.out.println("Id usuário interessado: " + Integer.toString(interessado.getId()));
+				System.out.println("Nome usuário interessado: " + interessado.getNome());
+				System.out.println("Mensagem da aplicação: " + candidatura.getMensagem());
+				System.out.println("E-mail do usuário: " + interessado.getEmail().getValor());
+				System.out.println("Telefone do usuário: " + interessado.getTelefone().getValor());
+				System.out.println("Preferências de contato do usuário: ");
+				if (interessado.getTelefone().isWhatsapp()) {
+					System.out.println("(x) WhatsApp");				
+				} else {
+					System.out.println("( ) WhatsApp");
+				}
+				if (interessado.getTelefone().isLigacao()) {
+					System.out.println("(x) Ligação");				
+				} else {
+					System.out.println("( ) Ligação");
+				}
+				System.out.println("Cidade do usuário: " + interessado.getEndereco().getCidade());
+				System.out.println("Estado do usuário: " + interessado.getEndereco().getEstado());
+				
+				System.out.println("===========================");
+			}
+
+    		System.out.println("1. Finalizar fila de interesse\n2. Voltar");
+    		
+    		int escolha = scanner.nextInt();
+			scanner.nextLine();
+			
+    		if (escolha == 1) {
+    			finalizado = MenuFinalizarFilaInteresse(animal);
+    		} else {
+    			finalizado = true;;
+    		}
+    	}
+	}
+	
+	private static boolean MenuFinalizarFilaInteresse(Animal animal) {
+		System.out.println("1. Escolher um adotante\n2.Finalizar sem adotante\n3. Voltar");
+    		
+		int escolha = scanner.nextInt();
+		scanner.nextLine();
+			
+		if (escolha == 1) {
+			System.out.println("Escolha o id do usuário que deseja escolher como adotante de " + animal.getNome());
+			System.out.println("(Deixe vazio para cancelar a ação)");
+			
+			String idAdotante = scanner.nextLine();
+			
+			if (idAdotante.isBlank()) {
+				System.out.println("Cancelando operação.");
+				return false;
+			}
+			
+			Adotante adotante = (Adotante) usuarioRepositorio.buscarUsuario(Integer.parseInt(idAdotante));
+			
+			if (adotante == null) {
+				System.out.println("Adotante não encontrado. Tente novamente.");
+				return false;
+			} else {
+				animal.setStatusFilaInteresse(FilaInteresseStatus.FINALIZADO);
+				animal.setAdotante(adotante);
+				return true;
+			}
+		}
+		return true;
+	}
 	
 	private static void CancelarProcessoAdocao() {
     	while (true) {
@@ -322,7 +450,7 @@ public class Menu {
 	private static void exibirListaAnimais(List<Animal> animais) {
 		for (Animal animal : animais) {
 			animal.exibirTodasInformacoes();
-			}
+		}
 	}
     
 	public static Usuario getUsuarioAtual() {
