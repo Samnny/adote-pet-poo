@@ -30,10 +30,19 @@ public abstract class Animal {
 		statusFilaInteresse = FilaInteresseStatus.ANALISE;
 	}
 	
+	public abstract String getTipo();
+
 	@Override
 	public String toString() {
 		return "Id do Animal: #" + getId() + "\n" +
 			   "Nome do Animal: " + getNome();
+	}
+	
+	public void exibirTodasInformacoes() {
+		System.out.println(this.toString());
+        System.out.println("Raça do Animal: " + getRaca());
+        System.out.println("Cor do Animal: " + getCor());
+        System.out.println("Espécie do Animal: " + getTipo());
 	}
 
 	public void setNome(String nome) {
@@ -69,6 +78,9 @@ public abstract class Animal {
 	public void setFilaInteresse(ArrayList<FilaInteresseItem> filaInteresse) {
 		this.filaInteresse = filaInteresse;
 	}
+	public void addToFilaInteresse(FilaInteresseItem filaInteresse) {
+		this.filaInteresse.add(filaInteresse);
+	}
 	public ArrayList<FilaInteresseItem> getFilaInteresse() {
 		return filaInteresse;
 	}
@@ -85,5 +97,5 @@ public abstract class Animal {
 		this.guardiao = guardiao;
 	}
 
-	public abstract String getTipo();
+	
 }
