@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 public class SistemaAdocao {
     private Usuario usuarioAtual;
-    private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
     private Scanner scanner = new Scanner(System.in);
+
+    public static UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
     public void iniciarSistema() {
         while (true) {
