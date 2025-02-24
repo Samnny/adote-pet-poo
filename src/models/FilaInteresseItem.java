@@ -5,7 +5,7 @@ public class FilaInteresseItem {
 	private String data;
 	private String mensagem;
 	
-	FilaInteresseItem(Adotante interessado, String data, String mensagem) {
+	public FilaInteresseItem(Adotante interessado, String data, String mensagem) {
 		this.interessado = interessado;
 		this.data = data;
 		this.mensagem = mensagem;

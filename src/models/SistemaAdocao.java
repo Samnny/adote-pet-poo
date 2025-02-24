@@ -6,6 +6,8 @@ import src.repositories.UsuarioRepositorio;
 import utils.AnimalFiltro;
 import src.repositories.AnimalRepositorio;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -169,10 +171,7 @@ public class SistemaAdocao {
     
     private void exibirListaAnimais(List<Animal> animais) {
     	for (Animal animal : animais) {
-    		System.out.println(animal.toString());
-            System.out.println("Raça do Animal: " + animal.getRaca());
-            System.out.println("Cor do Animal: " + animal.getCor());
-            System.out.println("Espécie do Animal: " + animal.getTipo());
+    		animal.exibirTodasInformacoes();
         }
     }
 
@@ -199,8 +198,37 @@ public class SistemaAdocao {
     	}
     }
     
-    private void menuSelecionarPet() {
-    	
+    private void menuSelecionarPet(List<Animal> animais) {
+    	while (true) {
+    		System.out.println("Digite o id do pet que deseja selecionar: ");
+    		
+    		String id = scanner.nextLine();
+    		Animal petSelecionado = animalRepositorio.listarAnimais(animais, "id", id).getFirst();
+    		menuPetSelecionado(petSelecionado);
+    	}
+    }
+    
+    private void menuPetSelecionado(Animal pet) {
+    	pet.exibirTodasInformacoes();
+    	while(true) {
+    		System.out.println("1. Entrar para fila de interesse\n2.Voltar");
+    		int escolha = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		if (escolha == 1) {
+    			System.out.println("Digite uma pequena descrição sobre você e porque se interessou por " + pet.getNome() + ". (Deixe vazio para cancelar a inscrição e voltar)");
+        		String mensagem = scanner.nextLine();
+        		if (mensagem.trim().isEmpty()) {
+        			break;
+        		} else {
+        			pet.addToFilaInteresse(
+    					new FilaInteresseItem((Adotante) usuarioAtual, ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toString(), mensagem)
+					);
+        		}
+    		} else {
+    			break;
+    		}
+    	}
     }
     
     private void menuFiltrarPets(List<Animal> animais) {
@@ -327,8 +355,6 @@ public class SistemaAdocao {
     		}
     	}
     }
-    
-    public void menuSelecionarPet() {}
 
     private void menuGuardiao() {
         while (true) {
