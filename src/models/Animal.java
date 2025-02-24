@@ -2,7 +2,10 @@ package src.models;
 
 import src.enums.FilaInteresseStatus;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public abstract class Animal {
 	private String nome;
@@ -43,6 +46,18 @@ public abstract class Animal {
         System.out.println("Raça do Animal: " + getRaca());
         System.out.println("Cor do Animal: " + getCor());
         System.out.println("Espécie do Animal: " + getTipo());
+	}
+	
+	public void exibirInformacoesFilaInteresse() {
+		System.out.print(getId() + "  --  " + getNome() + "  --  ");
+    	System.out.println(Integer.toString(getFilaInteresse().size()) + " candidatos");
+	}
+	
+	public void ordenaFilaInteresse() {
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+		filaInteresse.sort(Comparator.comparing(
+			item -> ZonedDateTime.parse(item.getData(), formatter)
+		));
 	}
 
 	public void setNome(String nome) {
