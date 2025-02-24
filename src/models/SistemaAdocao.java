@@ -228,18 +228,17 @@ public class SistemaAdocao {
         if (tipo.equals("cachorro")) {
             System.out.println("Digite porte do cachorro (PEQUENO, MEDIO, GRANDE):");
             CachorroPorte porte = CachorroPorte.valueOf(scanner.nextLine().toUpperCase());
-            novoAnimal = new Cachorro(animalRepositorio.gerarId(), nome, cor, raca, porte);
+            novoAnimal = new Cachorro(animalRepositorio.gerarId(), nome, cor, raca, (Guardiao) usuarioAtual, porte);
         } else if (tipo.equals("gato")) {
             System.out.println("Digite tipo de pelo do gato (CURTO, MEDIO, LONGO):");
             GatoPelo pelo = GatoPelo.valueOf(scanner.nextLine().toUpperCase());
-            novoAnimal = new Gato(animalRepositorio.gerarId(), nome, cor, raca, pelo);
+            novoAnimal = new Gato(animalRepositorio.gerarId(), nome, cor, raca, (Guardiao) usuarioAtual, pelo);
         } else {
             System.out.println("Tipo inválido!");
             return;
         }
 
         animalRepositorio.cadastrarAnimal(novoAnimal);
-        usuarioAtual.adicionarPet(novoAnimal);
         System.out.println("Pet adicionado com sucesso!");
     }
 

@@ -10,6 +10,7 @@ public abstract class Animal {
 	private Adotante adotadoPor;
 	private String cor;
 	private String raca;
+	private Guardiao guardiao;
 	private ArrayList<FilaInteresseItem> filaInteresse;
 	private FilaInteresseStatus statusFilaInteresse;
 	
@@ -17,12 +18,14 @@ public abstract class Animal {
 			int id,
 			String nome,
 			String cor,
-			String raca
+			String raca,
+			Guardiao guardiao
 	) {
 		this.id = id;
 		this.nome = nome;
 		this.cor = cor;
 		this.raca = raca;
+		this.guardiao = (Guardiao) guardiao;
 		filaInteresse = new ArrayList<FilaInteresseItem>();
 		statusFilaInteresse = FilaInteresseStatus.ANALISE;
 	}
@@ -74,5 +77,11 @@ public abstract class Animal {
 	}
 	public FilaInteresseStatus getStatusFilaInteresse() {
 		return statusFilaInteresse;
+	}
+	public Guardiao getGuardiao() {
+		return guardiao;
+	}
+	public void setGuardiao(Guardiao guardiao) {
+		this.guardiao = guardiao;
 	}
 }

@@ -5,8 +5,8 @@ import src.enums.CachorroPorte;
 public class Cachorro extends Animal {
 	private CachorroPorte porte;
 	
-	Cachorro(int id, String nome, String cor, String raca, CachorroPorte porte) {
-		super(id, nome, cor, raca);
+	Cachorro(int id, String nome, String cor, String raca, Guardiao guardiao, CachorroPorte porte) {
+		super(id, nome, cor, raca, guardiao);
 		this.setPorte(porte);
 	}
 
@@ -17,4 +17,8 @@ public class Cachorro extends Animal {
 	public void setPorte(CachorroPorte porte) {
 		this.porte = porte;
 	}
+	
+	public String getTipo() {
+		return "CACHORRO";
+	};
 }

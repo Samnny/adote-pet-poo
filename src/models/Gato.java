@@ -4,8 +4,8 @@ import src.enums.GatoPelo;
 public class Gato extends Animal {
 	private GatoPelo pelo;
 	
-	public Gato(int id, String nome, String cor, String raca, GatoPelo pelo) {
-		super(id, nome, cor, raca);
+	public Gato(int id, String nome, String cor, String raca, Guardiao guardiao, GatoPelo pelo) {
+		super(id, nome, cor, raca, guardiao);
 		this.setPelo(pelo);
 	}
 	
@@ -15,5 +15,9 @@ public class Gato extends Animal {
 	
 	public void setPelo(GatoPelo pelo) {
 		this.pelo = pelo;
+	}
+	
+	public String getTipo() {
+		return "GATO";
 	}
 }
