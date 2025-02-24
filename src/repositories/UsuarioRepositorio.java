@@ -29,6 +29,15 @@ public class UsuarioRepositorio {
     	}
     	return false;
     }
+    
+    public Usuario buscarUsuario(int id) {
+    	for (Usuario usuario : usuarios) {
+    		if (usuario.getId() == id) {
+    			return usuario;
+    		}
+    	}
+    	return null;
+    }
 
     public void editarUsuario(int index, Usuario usuario) {
         if (index >= 0 && index < usuarios.size()) {
