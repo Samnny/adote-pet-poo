@@ -220,7 +220,36 @@ public class Menu {
 				}
 			}
 		} else if (tipoUsuarioAtual == "GUARDIAO") {
-			/* TODO: MENU SELEÇÃO PET GUARDIAO */
+			boolean acaoConcluida = false;
+			while(!acaoConcluida) {
+				System.out.println("1. Excluir pet\n2. Visualizar fila de interesse.\n3Voltar");
+				int escolha = scanner.nextInt();
+				scanner.nextLine();
+				
+				if (escolha == 1) {
+					System.out.println("Certeza que deseja excluir " + pet.getNome() + "? (s)im/(N)ão");
+					String confirma = scanner.nextLine().toLowerCase();
+					char selecao = confirma.charAt(0);
+					
+					switch(selecao) {
+						case 's':
+							System.out.println("Excluindo pet " + pet.getNome() + " #" + Integer.toString(pet.getId()));
+							animalRepositorio.excluirAnimal(pet, usuarioAtual);
+							acaoConcluida = true;
+							break;
+						case 'n':
+							System.out.println("Voltando ao menu do pet " + pet.getNome());
+							break;
+						default:
+							System.out.println("Seleção inválida. " + pet.getNome() + " não será excluído.");
+							break;
+					}
+				} else if (escolha == 2) {
+					MenuListarFilasInteresse((Guardiao) usuarioAtual);
+				} else {
+					break;
+				}
+			}
 		}
 	}
 
