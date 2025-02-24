@@ -6,18 +6,28 @@ import java.util.List;
 
 public class UsuarioRepositorio {
     private List<Usuario> usuarios = new ArrayList<>();
+    private int ultimoId = 0;
 
     public void cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);
     }
 
-    public Usuario buscarUsuario(String login, String senha) {
+    public Usuario autenticarUsuario(String login, String senha) {
         for (Usuario usuario : usuarios) {
             if (usuario.getLogin().equals(login) && usuario.getSenha().equals(senha)) {
                 return usuario;
             }
         }
         return null;
+    }
+    
+    public boolean buscarUsuario(String login) {
+    	for (Usuario usuario : usuarios) {
+    		if (usuario.getLogin() == login) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     public void editarUsuario(int index, Usuario usuario) {
@@ -32,5 +42,10 @@ public class UsuarioRepositorio {
 
     public List<Usuario> listarUsuarios() {
         return usuarios;
+    }
+
+    public int gerarId() {
+        ultimoId++;  // Incrementa o ID
+        return ultimoId; // Retorna o novo ID
     }
 }
