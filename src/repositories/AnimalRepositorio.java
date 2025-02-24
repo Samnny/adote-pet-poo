@@ -1,17 +1,18 @@
 package src.repositories;
 
+import src.models.Adotante;
 import src.models.Animal;
-import src.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class AnimalRepositorio {
     private List<Animal> animais = new ArrayList<>();
     private int ultimoId = 0;
 
     public void cadastrarAnimal(Animal animal) {
-        animal.setId(gerarId());
         animais.add(animal);
     }
     
@@ -36,6 +37,55 @@ public class AnimalRepositorio {
 
     public List<Animal> listarAnimais() {
         return animais;
+    }
+
+    public List<Animal> listarAnimais(String chave, String valor) {
+    	return listarAnimais(animais, chave, valor);
+    }
+    
+    public List<Animal> listarAnimais(List<Animal> lista, String chave, String valor) {
+    	ArrayList<Animal> animaisFiltrados = new ArrayList<Animal>();
+    	Predicate<Animal> filtro = null;
+		switch (chave) {
+			case "status":
+				if (valor == "disponível") {
+					filtro = a -> a.getAdotante() == null;
+				} else {
+					filtro = a -> a.getAdotante() instanceof Adotante;
+				}
+				break;
+    		case "nome":
+    			filtro = a -> a.getNome().toLowerCase().equals(valor);
+    			break;
+    		case "id":
+    			filtro = a -> a.getId() == Integer.getInteger(valor);
+    			break;
+    		case "cor":
+    			filtro = a -> a.getCor().toLowerCase().equals(valor);
+    			break;
+    		case "raça":
+    			filtro = a -> a.getRaca().toLowerCase().equals(valor);
+    			break;
+    		case "tipo":
+    			filtro = a -> a.getTipo().toLowerCase().equals(valor);
+    			break;
+    		case "cidade":
+    			filtro = a -> a.getGuardiao().getEndereco().getCidade().toLowerCase().equals(valor);
+    			break;
+    		case "estado":
+    			filtro = a -> a.getGuardiao().getEndereco().getEstado().toLowerCase().equals(valor);
+    			break;
+    		default:
+    			break;
+		}
+    	
+		if (filtro != null) {
+    		animaisFiltrados = (ArrayList<Animal>) animais.stream()
+	            .filter(filtro)
+	            .collect(Collectors.toList());
+    	}
+		
+    	return (List<Animal>) animaisFiltrados;
     }
 
     public int gerarId() {

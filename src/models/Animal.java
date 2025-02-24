@@ -84,4 +84,6 @@ public abstract class Animal {
 	public void setGuardiao(Guardiao guardiao) {
 		this.guardiao = guardiao;
 	}
+
+	public abstract String getTipo();
 }
