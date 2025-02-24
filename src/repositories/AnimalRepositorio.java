@@ -54,6 +54,12 @@ public class AnimalRepositorio {
 					filtro = a -> a.getAdotante() instanceof Adotante;
 				}
 				break;
+			case "guardiao":
+				filtro = a -> a.getGuardiao().getId() == Integer.getInteger(valor);
+				break;
+			case "candidatoAdotante":
+				filtro = a -> a.getCandidatura(Integer.getInteger(valor)) != null;
+				break;
     		case "nome":
     			filtro = a -> a.getNome().toLowerCase().equals(valor);
     			break;
