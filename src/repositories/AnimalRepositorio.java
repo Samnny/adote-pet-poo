@@ -1,5 +1,6 @@
 package src.repositories;
 
+import src.enums.FilaInteresseStatus;
 import src.models.Adotante;
 import src.models.Animal;
 import src.models.Usuario;
@@ -64,10 +65,10 @@ public class AnimalRepositorio {
 				}
 				break;
 			case "guardiao":
-				filtro = a -> a.getGuardiao().getId() == Integer.getInteger(valor);
+				filtro = a -> a.getGuardiao().getId() == Integer.getInteger(valor) && a.getAdotante() == null;
 				break;
 			case "candidatoAdotante":
-				filtro = a -> a.getCandidatura(Integer.getInteger(valor)) != null;
+				filtro = a -> a.getCandidatura(Integer.getInteger(valor)) != null && a.getStatusFilaInteresse() == FilaInteresseStatus.ANALISE;
 				break;
     		case "nome":
     			filtro = a -> a.getNome().toLowerCase().equals(valor);
