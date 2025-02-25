@@ -4,7 +4,7 @@ import src.models.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioRepositorio {
+public class UsuarioRepositorio implements RepositorioUsuarioInterface{
     private List<Usuario> usuarios = new ArrayList<>();
     private int ultimoId = 0;
     
@@ -19,10 +19,12 @@ public class UsuarioRepositorio {
     	return instance;
     }
 
+    @Override
     public void cadastrarUsuario(Usuario usuario) {
         usuarios.add(usuario);
     }
 
+    @Override
     public Usuario autenticarUsuario(String login, String senha) {
         for (Usuario usuario : usuarios) {
             if (usuario.getLogin().equals(login) && usuario.getSenha().equals(senha)) {
@@ -31,7 +33,8 @@ public class UsuarioRepositorio {
         }
         return null;
     }
-    
+
+    @Override
     public boolean buscarUsuario(String login) {
     	for (Usuario usuario : usuarios) {
     		if (usuario.getLogin() == login) {
@@ -50,16 +53,19 @@ public class UsuarioRepositorio {
     	return null;
     }
 
+    @Override
     public void editarUsuario(int index, Usuario usuario) {
         if (index >= 0 && index < usuarios.size()) {
             usuarios.set(index, usuario);
         }
     }
 
+    @Override
     public void excluirUsuario(Usuario usuario) {
         usuarios.remove(usuario);
     }
 
+    @Override
     public List<Usuario> listarUsuarios() {
         return usuarios;
     }

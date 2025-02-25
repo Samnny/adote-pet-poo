@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class AnimalRepositorio {
+public class AnimalRepositorio implements RepositorioAnimalInterface {
 	private List<Animal> animais = new ArrayList<>();
 	private int ultimoId = 0;
 
@@ -27,10 +27,12 @@ public class AnimalRepositorio {
 		return instance;
 	}
 
+	@Override
 	public void cadastrarAnimal(Animal animal) {
 		animais.add(animal);
 	}
 
+	@Override
 	public Animal buscarAnimal(int id) {
 		for (Animal animal : animais) {
 			if (animal.getId() == id) {
@@ -40,12 +42,14 @@ public class AnimalRepositorio {
 		return null;
 	}
 
+	@Override
 	public void editarAnimal(int index, Animal animal) {
 		if (index >= 0 && index < animais.size()) {
 			animais.set(index, animal);
 		}
 	}
 
+	@Override
 	public void excluirAnimal(Animal animal) {
 		animais.remove(animal);
 	}
@@ -60,6 +64,7 @@ public class AnimalRepositorio {
 		}
 	}
 
+	@Override
 	public List<Animal> listarAnimais() {
 		return animais;
 	}
