@@ -1,5 +1,7 @@
 package src.models;
 
+import src.enums.GatoPelo;
+import src.repositories.AnimalRepositorio;
 import src.repositories.UsuarioRepositorio;
 import utils.Menu;
 
@@ -7,8 +9,9 @@ import java.util.Scanner;
 
 public class SistemaAdocao {
 	private static SistemaAdocao instance;
-	private Usuario usuarioAtual;
+	private static Usuario usuarioAtual;
     private Scanner scanner = new Scanner(System.in);
+    public UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance();
     
     private SistemaAdocao() {}
     
@@ -18,8 +21,14 @@ public class SistemaAdocao {
     	}
     	return instance;
     }
-
-    public UsuarioRepositorio usuarioRepositorio = UsuarioRepositorio.getInstance();
+    
+    public static Usuario getUsuarioAtual() {
+    	return usuarioAtual;
+    };
+    
+    private static void setUsuarioAtual(Usuario usuario) {
+    	usuarioAtual = usuario;
+    };
 
     public void iniciarSistema() {
         while (true) {
@@ -145,10 +154,28 @@ public class SistemaAdocao {
             scanner.nextLine();
 
             if (escolha == 1) {
-            	Adotante usuario = (Adotante) usuarioAtual;
+            	Adotante usuario = new Adotante(
+        			usuarioAtual.getId(),
+        			usuarioAtual.getNome(),
+        			usuarioAtual.getLogin(),
+        			usuarioAtual.getSenha(),
+        			usuarioAtual.getEmail(),
+        			usuarioAtual.getTelefone(),
+        			usuarioAtual.getEndereco()
+    			);
+            	setUsuarioAtual((Usuario) usuario);
             	Menu.MenuUsuario(usuario);
             } else if (escolha == 2) {
-            	Guardiao usuario = (Guardiao) usuarioAtual;
+            	Guardiao usuario = new Guardiao(
+        			usuarioAtual.getId(),
+        			usuarioAtual.getNome(),
+        			usuarioAtual.getLogin(),
+        			usuarioAtual.getSenha(),
+        			usuarioAtual.getEmail(),
+        			usuarioAtual.getTelefone(),
+        			usuarioAtual.getEndereco()
+    			);
+            	setUsuarioAtual((Usuario) usuario);
             	Menu.MenuUsuario(usuario);
             } else {
                 usuarioAtual = null;

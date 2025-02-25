@@ -1,7 +1,6 @@
 package src.models;
 
 public class Guardiao extends Usuario {
-	private int finaisFelizes = 0;
 	public Guardiao(
 		int id,
 		String nome,
@@ -13,14 +12,6 @@ public class Guardiao extends Usuario {
 	) {
     	super(id, nome, login, senha, email, telefone, endereco);	
     }
-
-    public int getFinaisFelizes() {
-		return finaisFelizes;
-	}
-
-	public void setFinaisFelizes(int finaisFelizes) {
-		this.finaisFelizes = finaisFelizes;
-	}
 
 	public String getTipo() {
     	return "GUARDIAO";

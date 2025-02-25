@@ -7,6 +7,7 @@ import src.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,8 @@ public class AnimalRepositorio {
 			excluirAnimal(animal);
 		} else {
 			System.out.println(
-					"Ação proibida pro usuário atual. Você não é guardião desse Animal. Nenhuma ação foi realizada.");
+				"Ação proibida pro usuário atual. Você não é guardião desse Animal. Nenhuma ação foi realizada."
+			);
 		}
 	}
 
@@ -68,49 +70,53 @@ public class AnimalRepositorio {
 
 	public List<Animal> listarAnimais(List<Animal> lista, String chave, String valor) {
 		ArrayList<Animal> animaisFiltrados = new ArrayList<Animal>();
-		Predicate<Animal> filtro = null;
+		Function<String, Predicate<Animal>> filtro = null;
 		switch (chave) {
 		case "status":
 			if (valor == "disponível") {
-				filtro = a -> a.getAdotante() == null;
+				filtro = v -> a -> a.getAdotante() == null;
 			} else {
-				filtro = a -> a.getAdotante() instanceof Adotante;
+				filtro = v -> a -> a.getAdotante() instanceof Adotante;
 			}
 			break;
 		case "guardiao":
-			filtro = a -> a.getGuardiao().getId() == Integer.getInteger(valor) && a.getAdotante() == null;
+			filtro = v -> a -> a.getGuardiao().getId() == Integer.parseInt(v) && a.getAdotante() == null;
 			break;
 		case "candidatoAdotante":
-			filtro = a -> a.getCandidatura(Integer.getInteger(valor)) != null
-					&& a.getStatusFilaInteresse() == FilaInteresseStatus.ANALISE;
+			filtro = v -> a -> a.getCandidatura(Integer.parseInt(v)) != null
+					&& (a.getStatusFilaInteresse() == FilaInteresseStatus.ANALISE || a.getAdotante().getId() == Integer.parseInt(v));
 			break;
 		case "nome":
-			filtro = a -> a.getNome().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getNome().toLowerCase().equals(v);
 			break;
 		case "id":
-			filtro = a -> a.getId() == Integer.getInteger(valor);
+			filtro = v -> a -> a.getId() == Integer.parseInt(v);
 			break;
 		case "cor":
-			filtro = a -> a.getCor().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getCor().toLowerCase().equals(v);
 			break;
 		case "raça":
-			filtro = a -> a.getRaca().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getRaca().toLowerCase().equals(v);
 			break;
 		case "tipo":
-			filtro = a -> a.getTipo().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getTipo().toLowerCase().equals(v);
 			break;
 		case "cidade":
-			filtro = a -> a.getGuardiao().getEndereco().getCidade().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getGuardiao().getEndereco().getCidade().toLowerCase().equals(v);
 			break;
 		case "estado":
-			filtro = a -> a.getGuardiao().getEndereco().getEstado().toLowerCase().equals(valor);
+			filtro = v -> a -> a.getGuardiao().getEndereco().getEstado().toLowerCase().equals(v);
 			break;
 		default:
 			break;
 		}
 
 		if (filtro != null) {
-			animaisFiltrados = (ArrayList<Animal>) animais.stream().filter(filtro).collect(Collectors.toList());
+			animaisFiltrados = (ArrayList<Animal>) animais.stream()
+				.filter(
+					filtro.apply(valor)
+				)
+				.collect(Collectors.toList());
 		}
 
 		return (List<Animal>) animaisFiltrados;

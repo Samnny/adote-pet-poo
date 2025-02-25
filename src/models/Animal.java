@@ -37,7 +37,7 @@ public abstract class Animal {
 
 	@Override
 	public String toString() {
-		return "Id do Animal: #" + getId() + "\n" +
+		return "Id do Animal: #" + Integer.toString(getId()) + "\n" +
 			   "Nome do Animal: " + getNome();
 	}
 	
@@ -49,7 +49,7 @@ public abstract class Animal {
 	}
 	
 	public void exibirInformacoesFilaInteresse() {
-		System.out.print(getId() + "  --  " + getNome() + "  --  ");
+		System.out.print("#" + Integer.toString(getId()) + "  --  " + getNome() + "  --  ");
     	System.out.println(Integer.toString(getFilaInteresse().size()) + " candidatos");
 	}
 	
@@ -106,7 +106,10 @@ public abstract class Animal {
 		System.out.print("Status da Fila de Interesse: ");
 		System.out.println(this.getStatusFilaInteresse());
 		System.out.print("Data da sua aplicação: ");
-		System.out.println(candidatura.getData());
+		String data = candidatura.getData();
+		ZonedDateTime zonedDateTime = ZonedDateTime.parse(data, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+		DateTimeFormatter exibicaoFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		System.out.println(zonedDateTime.format(exibicaoFormatter));
 		System.out.print("Sua mensagem de aplicação: ");
     	System.out.println(candidatura.getMensagem());
     	System.out.println("==================================");

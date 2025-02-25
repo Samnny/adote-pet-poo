@@ -1,6 +1,8 @@
 package src.models;
 
 public class Usuario {
+	private int animaisAdotados = 0;
+	private int finaisFelizes = 0;
 	private int id;
 	private String nome;
 	private String login;
@@ -24,6 +26,7 @@ public class Usuario {
 		this.senha = senha;
 		this.email = email;
 		this.telefone = telefone;
+		this.endereco = endereco;
 	}
 
 	public int getId() {
@@ -76,5 +79,21 @@ public class Usuario {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public int getAnimaisAdotados() {
+		return animaisAdotados;
+	}
+
+	public void setAnimaisAdotados(int animaisAdotados) {
+		this.animaisAdotados = animaisAdotados;
+	}
+
+	public int getFinaisFelizes() {
+		return finaisFelizes;
+	}
+
+	public void setFinaisFelizes(int finaisFelizes) {
+		this.finaisFelizes = finaisFelizes;
 	};
 }
