@@ -1,9 +1,7 @@
 package src.models;
 
-import src.enums.GatoPelo;
-import src.repositories.AnimalRepositorio;
 import src.repositories.UsuarioRepositorio;
-import utils.Menu;
+import src.utils.Menu;
 
 import java.util.Scanner;
 

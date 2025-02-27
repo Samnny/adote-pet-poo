@@ -1,3 +1,5 @@
+package src;
+
 import src.models.SistemaAdocao;
 
 public class Main {

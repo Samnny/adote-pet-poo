@@ -1,4 +1,4 @@
-package utils;
+package src.utils;
 
 import src.models.Usuario;
 import src.repositories.AnimalRepositorio;
